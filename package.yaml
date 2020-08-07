@@ -1,6 +1,6 @@
-name:                generate-halogen-generate-css-classes
+name:                generate-halogen-generate-css-classes-tailwind
 version:             0.1.0.0
-github:              "srghma/generate-halogen-generate-css-classes"
+github:              "srghma/generate-halogen-generate-css-classes-tailwind"
 license:             BSD3
 author:              "srghma"
 maintainer:          "srghma@gmail.com"
@@ -17,7 +17,7 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/srghma/generate-halogen-generate-css-classes#readme>
+description:         Please see the README on GitHub at <https://github.com/srghma/generate-halogen-generate-css-classes-tailwind#readme>
 
 default-extensions:
   - BangPatterns
@@ -66,6 +66,7 @@ dependencies:
 - optparse-applicative
 - hspec-discover
 - containers
+- nonempty-containers
 - string-qq
 - hspec
 - regex-base
@@ -76,12 +77,13 @@ dependencies:
 - system-filepath
 - ilist
 - css-text
+- extra
 
 library:
   source-dirs: src
 
 executables:
-  generate-halogen-generate-css-classes-exe:
+  generate-halogen-generate-css-classes-tailwind-exe:
     main:                Main.hs
     source-dirs:         cli
     ghc-options:
@@ -89,10 +91,10 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - generate-halogen-generate-css-classes
+    - generate-halogen-generate-css-classes-tailwind
 
 tests:
-  generate-halogen-generate-css-classes-test:
+  generate-halogen-generate-css-classes-tailwind-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
@@ -100,4 +102,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - generate-halogen-generate-css-classes
+    - generate-halogen-generate-css-classes-tailwind

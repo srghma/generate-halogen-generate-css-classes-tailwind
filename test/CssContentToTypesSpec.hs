@@ -9,6 +9,14 @@ import Data.Text (Text)
 import qualified Data.Text as Text
 import qualified Data.List as List
 import Data.String.QQ
+import Data.Set (Set)
+import qualified Data.Set as Set
+import Data.Set.NonEmpty (NESet)
+import qualified Data.Set.NonEmpty as NESet
+import Data.Map (Map)
+import qualified Data.Map as Map
+import Data.List.NonEmpty (NonEmpty(..))
+import qualified Data.List.NonEmpty as NonEmpty
 
 import Text.Regex.Base
 import Text.RE.PCRE.Text
@@ -108,11 +116,72 @@ a > .myButton5 {
           animation: other 1s infinite;
 }
 
+.sm\:nesting-level-1 {
+  -webkit-animation: other 1s infinite;
+          animation: other 1s infinite;
+}
+
+.sm\:nesting-level-1\:nesting-level-2 {
+  -webkit-animation: other 1s infinite;
+          animation: other 1s infinite;
+}
+
 |]
 
 spec :: Spec
 spec = do
   it "HistoryToInputsSpec" $ do
-    let (expected :: [Text]) = ["classInOneLine","classInsideClass","classInsideClass2","classWithBefore1","classWithBefore2","classWithBefore2Pre","classWithBefore3","classWithBefore3Post","mdc-slider","mdc-slider-asdf","mdc-slider__track","myButton","myButton2","myButton3","myButton5", "sm\\:animate-other","xl\\:animate-bounce"]
+    let expected :: TailwindClasses =
+          TailwindClasses
+          ( Set.fromList
+            [ OriginalName "classInOneLine"
+            , OriginalName "classInsideClass"
+            , OriginalName "classInsideClass2"
+            , OriginalName "classWithBefore1"
+            , OriginalName "classWithBefore2"
+            , OriginalName "classWithBefore2Pre"
+            , OriginalName "classWithBefore3"
+            , OriginalName "classWithBefore3Post"
+            , OriginalName "mdc-slider"
+            , OriginalName "mdc-slider-asdf"
+            , OriginalName "mdc-slider__track"
+            , OriginalName "myButton"
+            , OriginalName "myButton2"
+            , OriginalName "myButton3"
+            , OriginalName "myButton5"
+            ]
+          )
+          ( Map.fromList
+            [ ( ScopeName "Xl"
+              , TailwindClasses
+                ( Set.fromList
+                  [ OriginalName "xl\\:animate-bounce"
+                  ]
+                )
+                Map.empty
+              )
+            , ( ScopeName "Sm"
+              , TailwindClasses
+                ( Set.fromList
+                  [ OriginalName "sm\\:animate-other"
+                  , OriginalName "sm\\:nesting-level-1"
+                  ]
+                )
+                ( Map.fromList
+                  [ ( ScopeName "NestingLevel1"
+                    , TailwindClasses
+                      ( Set.fromList
+                        [ OriginalName "sm\\:nesting-level-1\\:nesting-level-2"
+                        ]
+                      )
+                      Map.empty
+                    )
+                  ]
+                )
+              )
+            ]
+          )
+
     -- for_ (cssContentToTypes cssContent) (putStrLn)
+
     cssContentToTypes cssContent `shouldBe` expected
