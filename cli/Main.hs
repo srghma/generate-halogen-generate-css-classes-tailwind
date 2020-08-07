@@ -85,7 +85,7 @@ renderFileContent moduleName originalNames =
     functions = originalNameFunctionName
       & map (\(originalName :: OriginalName, functionName :: FunctionName) -> Text.unlines
                 [ unFunctionName functionName <> " :: ClassName"
-                , unFunctionName functionName <> " = ClassName \"" <> unOriginalName originalName <> "\""
+                , unFunctionName functionName <> " = ClassName \"" <> Text.replace "\\" "\\\\" (unOriginalName originalName) <> "\""
                 ]
             )
       & Text.intercalate "\n"
@@ -111,7 +111,7 @@ writeTailwindClassesSet appOptions parentScopes (TailwindClasses set map) = do
 
   putStrLn $ Turtle.encodeString fileName
 
-  unless (null parentScopes) $ Turtle.mktree (Turtle.directory fileName)
+  Turtle.mktree (Turtle.directory fileName)
 
   NonEmpty.nonEmpty (Set.toList set) &
     maybe (pure ())
