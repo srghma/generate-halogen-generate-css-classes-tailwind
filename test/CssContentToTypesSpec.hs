@@ -126,6 +126,18 @@ a > .myButton5 {
           animation: other 1s infinite;
 }
 
+.w-1\/2 {
+  width: 50%;
+}
+
+.sm\:skew-y-12:hover:focus {
+  --transform-skew-y: 12deg;
+}
+
+.-skew-y-6 {
+  --transform-skew-y: -6deg;
+}
+
 |]
 
 spec :: Spec
@@ -135,6 +147,8 @@ spec = do
           TailwindClasses
           ( Set.fromList
             [ OriginalName "classInOneLine"
+            , OriginalName "-skew-y-6"
+            , OriginalName "w-1\\/2"
             , OriginalName "classInsideClass"
             , OriginalName "classInsideClass2"
             , OriginalName "classWithBefore1"
@@ -165,6 +179,7 @@ spec = do
                 ( Set.fromList
                   [ OriginalName "sm\\:animate-other"
                   , OriginalName "sm\\:nesting-level-1"
+                  , OriginalName "sm\\:skew-y-12"
                   ]
                 )
                 ( Map.fromList

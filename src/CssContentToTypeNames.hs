@@ -40,7 +40,7 @@ extractClassOrId css =
   $ fmap (flip atMay 1)
   $ flip atMay 0
   -- $ traceShowId
-  $ (css =~ [re|\.((\\\:|\w|\-)+)|] :: [[Text]])
+  $ (css =~ [re|\.((\\/|\\\:|\w|\-)+)|] :: [[Text]])
 
 cssContentToTypeNames :: Text -> Set Text
 cssContentToTypeNames cssContent =

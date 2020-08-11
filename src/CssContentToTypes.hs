@@ -1,6 +1,7 @@
 module CssContentToTypes where
 
 import "protolude" Protolude
+import           Text.RE.Replace
 import Text.Regex.Base
 import Text.RE.PCRE.Text
 import Text.CSS.Parse
@@ -26,9 +27,12 @@ newtype ScopeName    = ScopeName    { unScopeName :: Text } deriving (Eq, Show, 
 originalNameToFunctionName :: OriginalName -> FunctionName
 originalNameToFunctionName (OriginalName originalName) = FunctionName $ classNameToFunctionName $ lastDef "" $ Text.splitOn "\\:" originalName
   where
-    -- __ is a block, -- is now ____ and is a modifier
     classNameToFunctionName :: Text -> Text
-    classNameToFunctionName = Text.replace "-" "_" . Text.replace "--" "____"
+    classNameToFunctionName =
+      Text.replace "-" "_"
+      . Text.replace "--" "____" -- BAM modifier
+      . Text.replace "\\/" "_over_"
+      . (\text -> replaceAll "not_" $ text *=~ [re|^-|])
 
 data TailwindClasses = TailwindClasses (Set OriginalName) (Map ScopeName TailwindClasses)
   deriving (Eq, Show, Ord)
