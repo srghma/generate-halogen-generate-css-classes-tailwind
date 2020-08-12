@@ -78,14 +78,14 @@ makeValidDirectory = Turtle.decodeString . appendIfNotAlreadySuffix "/" . Turtle
 renderFileContent :: Text -> NonEmpty OriginalName -> Text
 renderFileContent moduleName originalNames =
   let
-    originalNameFunctionName :: [(OriginalName, FunctionName)] = map (\x -> (x, originalNameToFunctionName x)) (NonEmpty.toList originalNames)
+    names :: [(ClassName, FunctionName)] = map (\x -> (originalNameToClassName x, originalNameToFunctionName x)) (NonEmpty.toList originalNames)
 
-    exports = originalNameFunctionName & map snd & map unFunctionName & Text.intercalate ", "
+    exports = names & map snd & map unFunctionName & Text.intercalate ", "
 
-    functions = originalNameFunctionName
-      & map (\(originalName :: OriginalName, functionName :: FunctionName) -> Text.unlines
+    functions = names
+      & map (\(className :: ClassName, functionName :: FunctionName) -> Text.unlines
                 [ unFunctionName functionName <> " :: ClassName"
-                , unFunctionName functionName <> " = ClassName \"" <> Text.replace "\\" "\\\\" (unOriginalName originalName) <> "\""
+                , unFunctionName functionName <> " = ClassName \"" <> (unClassName className) <> "\""
                 ]
             )
       & Text.intercalate "\n"

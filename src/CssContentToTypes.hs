@@ -20,8 +20,9 @@ import qualified Data.List.NonEmpty as NonEmpty
 import qualified CssContentToTypeNames as CssContentToTypeNames
 import qualified "cases" Cases
 
-newtype FunctionName = FunctionName { unFunctionName :: Text } deriving (Eq, Show, Ord)
-newtype OriginalName = OriginalName { unOriginalName :: Text } deriving (Eq, Show, Ord)
+newtype FunctionName = FunctionName { unFunctionName :: Text } deriving (Eq, Show, Ord) -- not_ml_1_over_3
+newtype OriginalName = OriginalName { unOriginalName :: Text } deriving (Eq, Show, Ord) -- -ml-1\\/3
+newtype ClassName    = ClassName    { unClassName :: Text } deriving (Eq, Show, Ord) -- -ml-1/3
 newtype ScopeName    = ScopeName    { unScopeName :: Text } deriving (Eq, Show, Ord)
 
 originalNameToFunctionName :: OriginalName -> FunctionName
@@ -33,6 +34,9 @@ originalNameToFunctionName (OriginalName originalName) = FunctionName $ classNam
       . Text.replace "--" "____" -- BAM modifier
       . Text.replace "\\/" "_over_"
       . (\text -> replaceAll "not_" $ text *=~ [re|^-|])
+
+originalNameToClassName :: OriginalName -> ClassName
+originalNameToClassName (OriginalName originalName) = ClassName $ Text.replace "\\" "" originalName
 
 data TailwindClasses = TailwindClasses (Set OriginalName) (Map ScopeName TailwindClasses)
   deriving (Eq, Show, Ord)
